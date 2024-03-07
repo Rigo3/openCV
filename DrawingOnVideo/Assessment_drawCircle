@@ -1,0 +1,43 @@
+import cv2
+
+#CALLBACK FUNCTION FOR DRAWING A CIRCLE WHEN CLICK SOME POINT ON MOUSE
+
+def drawCircle(event,x,y,flags,param):
+    #GLOBAL VARIABLES
+    global x1,y1,clicked
+    
+    if event == cv2.EVENT_LBUTTONDOWN:
+        if clicked:
+            x1=0
+            y1=0
+            clicked=False
+            
+        if not clicked:
+            x1=x
+            y1=y
+            clicked=True
+
+#INITIALIZE VALUES
+x=0
+y=0
+clicked=False
+
+#DEFINE CAPTURE VARIABLE
+cap = cv2.VideoCapture(0)
+
+#CONNECT THE CALLBACK FUNCTION
+cv2.namedWindow('frame')
+cv2.setMouseCallback('frame',drawCircle)
+while True:
+    
+    ret,frame = cap.read()
+    
+    if clicked:
+        cv2.circle(frame,(x1,y1),80,(0,255,0),4,-1)
+    cv2.imshow('frame',frame)
+
+    if cv2.waitKey(1) & 0xFF == 27:
+        break
+
+cap.release()
+cv2.destroyAllWindows()
